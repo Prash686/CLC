@@ -2,7 +2,7 @@ body {
     font-family: "Plus Jakarta Sans", sans-serif !important;
     display: flex !important;
     flex-direction: column !important;
-    min-height: 100% !important;
+    height: 100vh!important;
 }
 
 .container {
@@ -22,6 +22,7 @@ body {
 .nav-link {
     color: #222222 !important;
 }
+
 
 /* Footer */
 .f-links  a {
