@@ -62,7 +62,7 @@ body {
    display: inline-block !important;
 }
 
-.card {
+.listing-card {
     border: none !important;
     margin-bottom: 2rem;
 }
@@ -74,6 +74,7 @@ body {
 }
 
 .card-body {
+    
     padding: 0 !important;
 }
 
