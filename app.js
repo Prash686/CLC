@@ -8,10 +8,14 @@ const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const session = require("express-session"); // Declare session once
 const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
-const listings = require("./routes/listing");
-const reviews = require("./routes/reviews"); // Import the reviews router
-const { connect } = require("http2");
+const listingRoutes = require("./routes/listing");
+const reviewRoutes = require("./routes/reviews"); 
+const userRoutes = require("./routes/user");
+
 
 const sessionOptions = {
     secret: "mysecret",
@@ -39,10 +43,15 @@ async function main() {
 
 app.use(session(sessionOptions));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
@@ -53,12 +62,23 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews); // Use the reviews router
+app.use("/listings", listingRoutes);
+app.use("/listings/:id/reviews", reviewRoutes); 
+app.use("/",userRoutes);
 
 app.get("/", (req, res) => {
     res.send("success");
 });
+
+// app.get("/demoUser", async (req, res) => {
+//     let fakeUser = new User({
+//         email : "gsa115376@gmail.com",
+//         username : "Pravin"
+//     });
+
+//     let registered = await User.register(fakeUser,"HelloWorld");
+//     res.send(registered);
+// });
 
 // Handle all 404 errors
 app.all("*", (req, res, next) => {
