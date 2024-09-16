@@ -12,6 +12,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const session = require("express-session"); // Declare session once
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -21,9 +22,24 @@ const User = require("./models/user.js");
 const listingRoutes = require("./routes/listing");
 const reviewRoutes = require("./routes/reviews"); 
 const userRoutes = require("./routes/user");
+const { error } = require('console');
 
+const bdUrl = "mongodb+srv://prash:prash%4011@cluster0.p4iok.mongodb.net/myDatabase?retryWrites=true&w=majority";
+
+const store = MongoStore.create({
+    mongoUrl : bdUrl,
+    crypto : {
+        secret : "mysecret"
+    },
+    touchAfter : 24 * 60 * 60,
+});
+
+store.on("error", () => {
+    console.log("Error in MONGO SESSION STORE", err);
+});
 
 const sessionOptions = {
+    store,
     secret: "mysecret",
     resave: false,
     saveUninitialized: true,
@@ -35,8 +51,10 @@ const sessionOptions = {
 };
 
 
-const Mongoose = "mongodb://127.0.0.1:27017/test";
+// const Mongoose = "mongodb://127.0.0.1:27017/test";
 
+
+console.log(bdUrl)
 main().then(() => {
     console.log("connected");
 }).catch(err => {
@@ -44,7 +62,7 @@ main().then(() => {
 });
 
 async function main() {
-    await mongoose.connect(Mongoose);
+    await mongoose.connect(bdUrl);
 }
 
 app.use(session(sessionOptions));
@@ -73,9 +91,9 @@ app.use("/listings", listingRoutes);
 app.use("/listings/:id/reviews", reviewRoutes); 
 app.use("/",userRoutes);
 
-app.get("/", (req, res) => {
-    res.send("success");
-});
+// app.get("/", (req, res) => {
+//     res.send("success");
+// });
 
 // Handle all 404 errors
 app.all("*", (req, res, next) => {

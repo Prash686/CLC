@@ -6,7 +6,7 @@ const { saveRedirectUrl } = require("../middleware.js");
 const userController = require("../controllers/users.js");
 
 // Combine routes for /signup (GET and POST)
-router.route("/signup")
+router.route("/singup")
   .get(userController.singedup)  // GET - Signup page
   .post(wrapAsync(userController.singup));  // POST - Signup form submission
 

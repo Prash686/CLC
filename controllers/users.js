@@ -1,8 +1,9 @@
 const User = require("../models/user.js");
 
 module.exports.singedup = (req, res) => {
-    res.render("users/singup.ejs");
+    res.render("users/singup.ejs"); // Note the correct file name too
 };
+
 
 module.exports.logedin = (req, res) => {
     res.render("users/login.ejs");
