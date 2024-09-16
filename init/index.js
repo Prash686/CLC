@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/test";
+const MONGO_URL = "mongodb+srv://prash:prash%4011@cluster0.p4iok.mongodb.net/myDatabase?retryWrites=true&w=majority";
 
 main()
   .then(() => {
@@ -21,7 +21,7 @@ const initDB = async () => {
   // Fix: Referencing initData.data instead of initDB.data
   const updatedData = initData.data.map((obj) => ({
     ...obj,
-    owner: "66e54db1bba15061de32c0d0",
+    owner: "66e7fc25dfe429d6099b1302",
   }));
   await Listing.insertMany(updatedData);
   console.log("data was initialized");

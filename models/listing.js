@@ -52,12 +52,10 @@ const listingSchema = new Schema({
   geometry: {
     coordinates: {
       type: [Number],  // Corrected from `number` to `Number`
-      required: true
     },
     type: {
       type: String,
       enum: ['Point'],  // Make sure it's capitalized correctly
-      required: true
     }
   }
 });
