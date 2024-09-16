@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV != "production"){
+    require('dotenv').config();
+}
+// console.log(process.env.secret);
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -11,6 +16,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+
 
 const listingRoutes = require("./routes/listing");
 const reviewRoutes = require("./routes/reviews"); 
@@ -59,6 +65,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.currUser = req.user;
     next();
 });
 
@@ -69,16 +76,6 @@ app.use("/",userRoutes);
 app.get("/", (req, res) => {
     res.send("success");
 });
-
-// app.get("/demoUser", async (req, res) => {
-//     let fakeUser = new User({
-//         email : "gsa115376@gmail.com",
-//         username : "Pravin"
-//     });
-
-//     let registered = await User.register(fakeUser,"HelloWorld");
-//     res.send(registered);
-// });
 
 // Handle all 404 errors
 app.all("*", (req, res, next) => {

@@ -1,35 +1,24 @@
 const express = require("express");
 const router = express.Router(); 
-const User = require("../models/user.js");
-const ExpressError = require("../utils/ExpressError.js");
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
+const { saveRedirectUrl } = require("../middleware.js");
+const userController = require("../controllers/users.js");
 
-router.get("/singup", (req, res) => {
-    res.render("users/singup.ejs")
-});
+// Combine routes for /signup (GET and POST)
+router.route("/signup")
+  .get(userController.singedup)  // GET - Signup page
+  .post(wrapAsync(userController.singup));  // POST - Signup form submission
 
-router.get("/login", (req, res) => {
-    res.render("users/login.ejs")
-});
+// Combine routes for /login (GET and POST)
+router.route("/login")
+  .get(userController.logedin)  // GET - Login page
+  .post(saveRedirectUrl, passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true
+  }), userController.login);  // POST - Login form submission
 
-router.post("/singup", wrapAsync(async(req, res) => {
-    try{
-        let {username, email, password} = req.body;
-    const newUser = new User({email, username});
-    await User.register(newUser, password);
-    req.flash("success", "Welcome To Wonderlust");
-    res.redirect("/listings");
-    } catch(err) {
-        req.flash("error", err.message);
-        res.redirect("/singup");
-    }
-    
-}));
-
-router.post("/login",passport.authenticate("local",{ failureRedirect: "/login", failureFlash: true}), async(req, res) => {
-    req.flash("success", "Welcome Back To Wonderlust");
-    res.redirect("/listings");
-});
+// Logout route remains as a separate GET request
+router.get("/logout", userController.logout);
 
 module.exports = router;

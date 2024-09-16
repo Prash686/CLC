@@ -109,3 +109,32 @@ body {
 .btns {
     display: flex;
 }
+
+.star-rating {
+    direction: rtl; /* Display the stars from right to left */
+    font-size: 2rem;
+}
+
+.star-rating input {
+    display: none; /* Hide radio inputs */
+}
+
+.star-rating label {
+    color: #ddd; /* Default star color */
+    cursor: pointer; /* Make the stars clickable */
+}
+
+.star-rating input:checked ~ label {
+    color: #ffc107; /* Selected star color */
+}
+
+.star-rating input:hover ~ label,
+.star-rating label:hover ~ label {
+    color: #ffc107; /* Hover color */
+}
+
+/* Map */
+#map {
+    height: 400px;
+    width: 60vh;
+}
