@@ -1,0 +1,245 @@
+<% layout('/layouts/boilerplate') -%>
+<link rel="stylesheet" href="/css/home.css">
+<style>
+    .hero {
+      background: url('hero.jpg') no-repeat center center;
+      background-size: cover;
+      margin-top: 5px;
+      color: #fff;
+      text-align: center;
+      padding: 120px 0;
+      transition: background-size 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+  
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Dark overlay for better text visibility */
+    }
+  
+    .hero .container {
+      position: relative;
+      z-index: 1;
+    }
+  
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      transition: opacity 0.5s ease;
+    }
+  
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      transition: opacity 0.5s ease;
+    }
+  
+    .hero a.btn {
+      background-color: #fe424d; /* Updated color */
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      font-size: 1.25rem;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+  
+    .hero a.btn:hover {
+      background-color: #d52c3c; /* Darker shade */
+      transform: scale(1.05);
+    }
+  
+    /* Features Section */
+    #features {
+      padding: 3rem 0;
+      background-color: #f8f9fa; /* Light grey background */
+    }
+  
+    .feature-card {
+      background-color: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+  
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  
+    .feature-icon {
+      font-size: 3rem;
+      color: #fe424d; /* Updated color */
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+    }
+  
+    .feature-icon:hover {
+      color: #d52c3c; /* Darker shade */
+    }
+  
+    /* Cards for Student and Admin Interfaces */
+    .card-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+  
+    .card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+      width: 300px;
+      padding: 1.5rem;
+      overflow: hidden;
+    }
+  
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+  
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  
+    .card h3 {
+      margin-bottom: 1rem;
+      color: #423c49; /* Dark grey for card headings */
+    }
+  
+    .card p {
+      margin-bottom: 1.5rem;
+      color: #4e415e; /* Medium grey for card text */
+    }
+  
+    .card a {
+      background-color: #fe424d; /* Updated color */
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+    }
+  
+    .card a:hover {
+      background-color: #d52c3c; /* Darker shade */
+      transform: scale(1.05);
+    }
+  
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 80px 0;
+      }
+  
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+  
+      .hero p {
+        font-size: 1.25rem;
+      }
+  
+      .feature-card {
+        padding: 1rem;
+      }
+  
+      .card-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  
+    @media (max-width: 576px) {
+      .hero h1 {
+        font-size: 1.75rem;
+      }
+  
+      .hero p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+  <div class="container">
+    <h1>Welcome to CLC Portal</h1>
+    <p>Apply for your College Leaving Certificate with ease. Admins can manage applications effectively.</p>
+    <a href="/apply-clc" class="btn btn-primary btn-lg">Apply for CLC</a>
+  </div>
+</section>
+<br>
+
+<!-- Cards for Student and Admin Interfaces -->
+<section id="cards" class="container">
+  <h2 class="text-center mb-4">Explore Our Options</h2>
+  <div class="card-container">
+    <div class="card">
+      <img src="student.png" alt="Student Image">
+      <h3>Student Interface</h3>
+      <p>Submit your application for a College Leaving Certificate and track its status.</p>
+      <a href="/apply-clc" class="btn btn-primary btn-lg">Apply Now</a>
+    </div>
+    <div class="card">
+      <img src="admin.png" alt="Admin Image">
+      <h3>Admin Interface</h3>
+      <p>Review, approve, or reject student applications seamlessly.</p>
+      <a href="/admin" class="btn btn-primary btn-lg">Manage Applications</a>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="container my-5">
+  <h2 class="text-center mb-4">Features</h2>
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="feature-card text-center p-4">
+        <div class="feature-icon">
+          <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <h4>Easy Application Process</h4>
+        <p>Quickly submit your CLC application through our user-friendly interface.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="feature-card text-center p-4">
+        <div class="feature-icon">
+          <i class="bi bi-clock"></i>
+        </div>
+        <h4>Track Your Application</h4>
+        <p>Monitor the status of your application in real time.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="feature-card text-center p-4">
+        <div class="feature-icon">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <h4>Admin Management</h4>
+        <p>Admins can easily manage applications and communicate with students.</p>
+      </div>
+    </div>
+  </div>
+</section>
+

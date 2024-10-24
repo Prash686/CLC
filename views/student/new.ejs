@@ -1,0 +1,54 @@
+<% layout('/layouts/boilerplate') -%>
+<div class="row">
+  <div class="col-8 offset-2">
+    <br>
+    <h3>Application Form For CLC</h3>
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+      
+      <div class="mb-3 row">
+        <div class="col">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input name="listing[lastName]" placeholder="Enter Last Name" type="text" class="form-control" required/>
+          <div class="valid-feedback">Last Name looks good</div>
+        </div>
+        <div class="col">
+          <label for="firstName" class="form-label">First Name</label>
+          <input name="listing[firstName]" placeholder="Enter First Name" type="text" class="form-control" required/>
+          <div class="valid-feedback">First Name looks good</div>
+        </div>
+        <div class="col">
+          <label for="middleName" class="form-label">Middle Name</label>
+          <input name="listing[middleName]" placeholder="Enter Middle Name" type="text" class="form-control" required/>
+          <div class="valid-feedback">Middle Name looks good</div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col">
+          <label for="RollNO." class="form-label">Roll / Enrollment No.</label>
+          <input name="listing[RollNO.]" placeholder="Enter Roll / Enroll NO." type="number" class="form-control" max="2" min="4" required/>
+          <div class="valid-feedback">roll no. is OK</div>
+        </div>
+        <div class="col">
+          <label for="middleName" class="form-label">Branch Name</label>
+          <input name="listing[BranchName]" placeholder="Enter Branch Name" type="text" class="form-control" required/>
+          <div class="valid-feedback">Branch is OK</div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="Reason" class="form-label">Reason for Leaving</label>
+        <input name="listing[Reason]" placeholder="Give Appropriate Reason" type="text" class="form-control" min="20" max="50" required/>
+        <div class="invalid-feedback">Reason should be within 20 - 50 words</div>
+      </div>
+
+      <div class="mb-3"> 
+        <label for="description" class="form-label">Description</label> 
+        <textarea name="listing[description]" class="form-control" placeholder="Reason for Leaving" required style="height: 125px;"></textarea>
+        <div class="invalid-feedback">Reason for Leaving</div>
+      </div>
+      <br>
+      <button class="btn btn-dark add-btn">Apply</button>
+      <br><br>
+    </form>
+  </div>
+</div>

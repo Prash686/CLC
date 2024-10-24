@@ -1,61 +1,38 @@
-const Listing = require("./models/listing.js");
+const ClcApplication = require("./models/ClcApplication.js"); // Ensure this model exists
 const ExpressError = require("./utils/ExpressError.js");
-const Review = require("./models/review");
-const { reviewSchema } = require("./schema.js");
-const { listingSchema } = require("./schema.js");
 
-module.exports.isLoggedIn = (req, res ,next) => {
-    if(!req.isAuthenticated()){
+// Middleware to check if a user is logged in
+module.exports.isLoggedIn = (req, res, next) => {
+    if (!req.isAuthenticated()) {
         req.session.redirectUrl = req.originalUrl;
-        req.flash("error", "Please Login To Create Listing");
+        req.flash("error", "Please Login To Access This Page");
         return res.redirect("/login");
     }
     next();
-} 
+};
 
+// Middleware to save the redirect URL after login
 module.exports.saveRedirectUrl = (req, res, next) => {
-    if(req.session.redirectUrl){
+    if (req.session.redirectUrl) {
         res.locals.redirectUrl = req.session.redirectUrl;
     }
     next();
-}
-
-module.exports.isOwner = async (req, res, next) => {
-    let {id} = req.params;
-    let listing = await Listing.findById(id);
-    if(!listing.owner._id.equals(res.locals.currUser._id)) {
-        req.flash("error", "You are not a owner of this Listing");
-        return res.redirect(`/listings/${id}`);
-    }
-    next();
-}
-
-module.exports.validateListings = (req, res, next) => {
-    const { error } = listingSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
 };
 
-module.exports.validateReviews = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body);
-    if (error) {
-        let errmsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errmsg);
-    } else {
-        next();
-    }
-};
-
-module.exports.isReviewAuthor = async (req, res, next) => {
-    let {id, reviewId} = req.params;
-    let review = await Review.findById(reviewId);
-    if(!review.author._id.equals(res.locals.currUser._id)) {
-        req.flash("error", "You are not a author of this review");
-        return res.redirect(`/listings/${id}`);
+// Middleware to check if a user is an admin
+module.exports.isAdmin = (req, res, next) => {
+    if (res.locals.currUser.role !== 'admin') {
+        req.flash("error", "You do not have permission to perform this action");
+        return res.redirect("/clc/applications"); // Redirect to a relevant page
     }
     next();
-}
+};
+
+// Middleware to validate CLC applications
+module.exports.validateClcApplication = (req, res, next) => {
+    const { course, reason } = req.body; // Adjust this based on your form fields
+    if (!course || !reason) {
+        throw new ExpressError("Course and reason are required.", 400);
+    }
+    next();
+};

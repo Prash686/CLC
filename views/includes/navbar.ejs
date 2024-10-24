@@ -1,55 +1,122 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
 <style>
-
   .btn-search {
-    background-color :  #fe424d;
-    color: white;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+      background-color: #fe424d;
+      color: white;
+      border-radius: 25px;
+      padding: 0 1rem;
   }
 
   .btn-search:hover {
-    background-color :  #fe424d;
-    color: white;
-  }
-  .btn-search i {
-    display: inline;
-    margin-right: 0.5rem;
+      background-color: #fe424d;
+      color: white;
   }
 
   .search-input {
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 1rem;
+      border-radius: 25px;
+      padding: 0.5rem 3rem;
+      font-size: 1rem;
+  }
+
+  body {
+      background-color: #f8f9fa; /* Light background color */
+  }
+  
+  .search-input:focus {
+      border-color: #fe424d; /* Focus border color */
+      box-shadow: 0 0 5px rgba(254, 66, 77, 0.5); /* Focus glow */
+  }
+
+  .container {
+      margin-top: 60px; /* Spacing for content */
+  }
+  
+  .logo {
+      width: 40px; /* Adjust logo size */
+      height: auto; /* Maintain aspect ratio */
+      margin-right: 10px; /* Space between logo and text */
+      vertical-align: middle; /* Aligns logo vertically */
+  }
+
+  i {
+    margin: 5px;
+  }
+
+  .navbar-nav .nav-link {
+      font-size: 1.1rem; /* Increase font size for nav links */
+      margin: 10px 0; /* Add vertical margin for spacing */
+  }
+
+  .offcanvas-title {
+      font-size: 1.5rem; /* Increase title font size in sidebar */
+  }
+
+  .btn-light {
+      font-size: 1.1rem; /* Increase button font size */
+      margin-left: 10px; /* Spacing between buttons */
+  }
+
+  .text-center {
+      margin-top: 20px; /* Additional spacing for welcome message */
+      font-size: 1.5rem; /* Increase font size for the heading */
+  }
+
+  .offcanvas-body {
+      padding: 20px; /* Add padding for the offcanvas body */
   }
 </style>
+<body>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+<nav class="navbar navbar-expand-md border-bottom sticky-top">
+<div class="container-fluid">
+    <a class="navbar-brand" href="/home">
+        <img src="logo.png" alt="Logo" class="logo"> Student Portal
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
         <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/listings">Explore</a>
-          
-        </div>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ms-auto">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2 search-input" type="search" placeholder="Search destinations">
-            <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
-          </form>
+            <a href="/notifications" class="btn btn-light ms-2"><i class="fa-solid fa-bell"></i></a>
+            <button class="btn btn-light" id="sidebarToggle"><i class="fa-solid fa-user-circle"></i></button>
         </div>
-        <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/Listings/new">Add your home</a>
-          <% if(!currUser) {%>
-            <a class="nav-link " aria-current="page" href="/singup"><b>Singup</b></a>
-            <a class="nav-link" href="/login"><b>Login</b></a>
-          <% } %>
-          <% if(currUser) {%>
-          <a class="nav-link" href="/logout"><b>Logout</b></a>
-          <% } %>
-        </div>
-      </div>
     </div>
-  </nav>
+</div>
+</nav>
+
+<!-- Sidebar -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+<div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="sidebarLabel">User Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    <div class="navbar-nav">
+        <a class="nav-link" href="/profile"><i class="fa-solid fa-user"></i> Profile</a>
+        <a class="nav-link" href="/apply-clc"><i class="fa-solid fa-file-upload"></i> Apply for CLC</a>
+        <a class="nav-link" href="/check-status"><i class="fa-solid fa-check-circle"></i> Check Application Status</a>
+    </div>
+    <div class="navbar-nav">
+        <% if (!currUser) { %>
+            <a class="nav-link" href="/signup"><i class="fa-solid fa-user-plus"></i> <b>Signup</b></a>
+            <a class="nav-link" href="/login"><i class="fa-solid fa-sign-in-alt"></i> <b>Login</b></a>
+        <% } else { %>
+            <a class="nav-link" href="/notifications"><i class="fa-solid fa-bell"></i> Notifications</a>
+            <a class="nav-link" href="/logout"><b><i class="fa-solid fa-power-off"></i> Logout</b></a>
+        <% } %>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+<script>
+// Toggle sidebar
+document.getElementById('sidebarToggle').addEventListener('click', function () {
+    var sidebar = new bootstrap.Offcanvas(document.getElementById('sidebar'));
+    sidebar.show();
+});
+</script>

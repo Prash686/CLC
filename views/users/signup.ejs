@@ -1,0 +1,42 @@
+<% layout('/layouts/boilerplate') -%>
+
+<div class="row mt-3">
+    <h1 class="col-8 offset-3">Signup On Student Portal</h1>
+    <div class="col-8 offset-3">
+        <form action="/signup" method="post" novalidate class="needs-validation">
+            <div class="mb-3">
+                <label for="username" class="form-label">Name</label>
+                <input name="username" id="username" type="text" class="form-control" required />
+                <div class="valid-feedback">Looks good</div>
+            </div>
+            <div class="mb-3">
+                <label for="College" class="form-label">College</label>
+                <input name="College" id="College" type="text" class="form-control" required />
+                <div class="valid-feedback">Looks good</div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input name="email" id="email" type="email" class="form-control" required />
+                <div class="valid-feedback">Looks good</div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input name="password" id="password" type="password" class="form-control" required />
+                <div class="valid-feedback">Looks good</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Role</label><br />
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="role" id="student" value="student" required />
+                    <label class="form-check-label" for="student">Student</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="role" id="admin" value="admin" required />
+                    <label class="form-check-label" for="admin">Admin</label>
+                </div>
+                <div class="valid-feedback">Please select a role</div>
+            </div>
+            <button class="btn btn-success" type="submit">Signup</button>
+        </form>
+    </div>
+</div>

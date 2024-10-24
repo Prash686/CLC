@@ -1,7 +1,6 @@
-if(process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
-// console.log(process.env.secret);
 
 const express = require("express");
 const app = express();
@@ -11,59 +10,57 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
-const session = require("express-session"); // Declare session once
+const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
-
-const listingRoutes = require("./routes/listing");
-const reviewRoutes = require("./routes/reviews"); 
+const clcApplicationRoutes = require("./routes/clcApplication"); // Updated route for CLC applications
 const userRoutes = require("./routes/user");
-const { error } = require('console');
-
-const bdUrl = "mongodb+srv://prash:prash%4011@cluster0.p4iok.mongodb.net/myDatabase?retryWrites=true&w=majority";
+const bdUrl = process.env.MONGODB_URI || "mongodb+srv://prash:prash%4011@cluster0.p4iok.mongodb.net/myDatabase?retryWrites=true&w=majority"; // Ensure this is formatted correctly
 
 const store = MongoStore.create({
-    mongoUrl : bdUrl,
-    crypto : {
-        secret : "mysecret"
+    mongoUrl: bdUrl,
+    crypto: {
+        secret: process.env.SESSION_SECRET || "mysecret", // Use environment variable for security
     },
-    touchAfter : 24 * 60 * 60,
+    touchAfter: 24 * 60 * 60,
 });
 
-store.on("error", () => {
+store.on("error", (err) => {
     console.log("Error in MONGO SESSION STORE", err);
 });
 
 const sessionOptions = {
     store,
-    secret: "mysecret",
+    secret: process.env.SESSION_SECRET || "mysecret", // Use environment variable for security
     resave: false,
     saveUninitialized: true,
-    cookie: { // Change Cookie to cookie
+    cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        httpOnly: true, // Ensures the cookie is only accessible by the web server
+        httpOnly: true,
     }
 };
 
-
-// const Mongoose = "mongodb://127.0.0.1:27017/test";
-
-
-console.log(bdUrl)
 main().then(() => {
-    console.log("connected");
+    console.log("Connected to MongoDB");
 }).catch(err => {
     console.log(err);
 });
 
+
 async function main() {
-    await mongoose.connect(bdUrl);
+    try {
+        await mongoose.connect(bdUrl);
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error("MongoDB connection error:", err);
+    }
 }
+
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -83,17 +80,13 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currUser = req.user;
+    res.locals.currUser = req.user; // Track the current user
     next();
 });
 
-app.use("/listings", listingRoutes);
-app.use("/listings/:id/reviews", reviewRoutes); 
-app.use("/",userRoutes);
-
-// app.get("/", (req, res) => {
-//     res.send("success");
-// });
+// Updated routes for CLC portal
+app.use("/clc", clcApplicationRoutes); // Route for CLC applications
+app.use("/", userRoutes); // User routes for signup/login/logout
 
 // Handle all 404 errors
 app.all("*", (req, res, next) => {
@@ -103,7 +96,7 @@ app.all("*", (req, res, next) => {
 // Error handler
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went wrong" } = err;
-    res.status(statusCode).render("listings/error.ejs", { message });
+    res.status(statusCode).render("error.ejs", { message }); // Updated to a general error page
 });
 
 app.listen(8080, () => {
