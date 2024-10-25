@@ -89,6 +89,9 @@ app.use((req, res, next) => {
 app.use("/clc", clcApplicationRoutes); // Route for CLC applications
 app.use("/", userRoutes); // User routes for signup/login/logout
 
+app.get("/",(req,res) => {
+ res.redirect("/home");
+});
 // Handle all 404 errors
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "Page Not Found"));
