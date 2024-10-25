@@ -1,49 +1,52 @@
 const express = require("express");
-const router = express.Router(); 
+const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
-const { isLoggedIn, isAdmin } = require("../middleware.js");
-const { saveRedirectUrl } = require("../middleware.js");
-const userController = require("../controllers/users.js");
+const { isLoggedIn, isAdmin } = require("../middleware");
+const userController = require("../controllers/users");
+const multer = require("multer");
+const { storage } = require("../cloudConfig");
+const upload = multer({ storage });
 
 // Combine routes for /signup (GET and POST)
 router.route("/signup")
-  .get(userController.signedup)  // GET - Signup page
-  .post(wrapAsync(userController.signup));  // POST - Signup form submission
+  .get(userController.signedup)
+  .post(wrapAsync(userController.signup));
 
 // Combine routes for /login (GET and POST)
 router.route("/login")
-  .get(userController.logedin)  // GET - Login page
-  .post(saveRedirectUrl, passport.authenticate("local", {
+  .get(userController.logedin)
+  .post(passport.authenticate("local", {
     failureRedirect: "/login",
     failureFlash: true
-  }), userController.login);  // POST - Login form submission
+  }), userController.login);
 
-// Route for students to apply for CLC (no need to authenticate again for form submission)
+// Route for students to apply for CLC
 router.route("/apply-clc")
-  .get(userController.apply)  // GET - Application form page (requires user to be logged in)
-  .post(wrapAsync(userController.submitClcApplication));  // POST - Handle form submission
+  .get(userController.apply)
+  .post(wrapAsync(userController.submitClcApplication));
 
 // Logout route
 router.get("/logout", userController.logout);
 
+// Check application status
 router.get("/check-status", userController.checkStatus);
 
+// Profile page
 router.get("/profile", userController.profile);
 
-
 // Admin home route
-router.get( "/admin/home", isAdmin, userController.adminHome);  // GET - Admin home page
+router.get("/admin/home", isAdmin, userController.adminHome);
 
 // Student home route
-router.get("/home", userController.studentHome);  // GET - Student home page
+router.get("/home", userController.studentHome);
 
-router.route("/view-application/:id", isAdmin,)
-  .get(wrapAsync(userController.getApplicationById)) // Admin views a specific application
-  // .put(isAdmin, wrapAsync(userController.reviewApplication)) // Admin reviews application status
-  // .delete(isAdmin, wrapAsync(userController.deleteApplication)); // Admin deletes an application
+// Admin views a specific application
+router.route("/view-application/:id")
+  .get(isAdmin, wrapAsync(userController.getApplicationById));
 
-router.post('/application/:id/approve', userController.approveApplication);
-router.post('/application/:id/reject', userController.rejectApplication);
+// Approve/reject application routes with file upload for approval
+router.post('/application/:id/approve', isAdmin, upload.single('clcDocument'), userController.approveApplication);
+router.post('/application/:id/reject', isAdmin, userController.rejectApplication);
 
 module.exports = router;

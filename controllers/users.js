@@ -1,6 +1,6 @@
 const User = require("../models/user.js");
 const ClcApplication = require('../models/ClcApplication');
-
+const { cloudinary } = require('../cloudConfig');
 // Renders the Signup page
 module.exports.signedup = (req, res) => {
     res.render("users/signup.ejs"); // Adjusted to CLC Portal Signup
@@ -35,9 +35,17 @@ module.exports.checkStatus = async(req, res) => {
     res.render("student/checkStatus.ejs",{applications}); // Render the student home page
 };
 
-module.exports.profile = async(req, res) => {
-    const user = await  User.findById({ _id: req.user._id});
-    res.render("profile.ejs",{user}); // Render the student home page
+module.exports.profile = async (req, res) => {
+    try {
+        if (!req.user || !req.user._id) {
+            return res.redirect('/login'); // Redirect if no user is found in the request
+        }
+        const user = await User.findById(req.user._id);
+        res.render('profile.ejs', { user });
+    } catch (error) {
+        console.error("Error fetching profile:", error);
+        res.status(500).send("Server error");
+    }
 };
 
 module.exports.apply = (req, res) => {
@@ -84,14 +92,15 @@ module.exports.signup = async (req, res, next) => {
 
 module.exports.approveApplication = async (req, res) => {
     const { id } = req.params;
-    try {
-        await ClcApplication.findByIdAndUpdate(id, { status: 'Approved', dateReviewed: new Date() });
-        req.flash("success", "Application approved.");
-        res.redirect(`/view-application/${id}`);
-    } catch (err) {
-        req.flash("error", "Something went wrong.");
-        res.redirect("/admin/home");
+    const application = await ClcApplication.findById(id);
+    if (req.file) {
+        application.documentUploaded = req.file.path;
     }
+    application.status = "Approved";
+    application.dateReviewed = new Date();
+    await application.save();
+    req.flash("success", "Application approved!");
+    res.redirect(`/view-application/${id}`);
 };
 
 module.exports.rejectApplication = async (req, res) => {
