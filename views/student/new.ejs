@@ -29,7 +29,7 @@
       <div class="mb-3 row">
         <div class="col">
           <label for="RollNO" class="form-label">Roll / Enrollment No.</label>
-          <input name="application[RollNO]" placeholder="Enter Roll / Enroll NO." type="number" class="form-control" max="100000" min="1" required/>
+          <input name="application[RollNO]" placeholder="Enter Roll / Enroll NO." type="number" class="form-control"  min="1" required/>
           <div class="valid-feedback">Roll No. is OK</div>
         </div>
         <div class="col">
@@ -47,7 +47,7 @@
 
       <div class="mb-3"> 
         <label for="description" class="form-label">Description</label> 
-        <textarea name="application[description]" class="form-control" placeholder="Reason for Leaving" required style="height: 125px;"></textarea>
+        <textarea name="application[description]" class="form-control" placeholder="Reason for Leaving" required style="height: 125px;" minlength="20"></textarea>
         <div class="invalid-feedback">Description required</div>
       </div>
       <br>
