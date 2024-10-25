@@ -3,48 +3,52 @@
   <div class="col-8 offset-2">
     <br>
     <h3>Application Form For CLC</h3>
-    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+    <form method="POST" action="/clc/apply-clc" novalidate class="needs-validation"  id="clcForm">
       
       <div class="mb-3 row">
         <div class="col">
           <label for="lastName" class="form-label">Last Name</label>
-          <input name="listing[lastName]" placeholder="Enter Last Name" type="text" class="form-control" required/>
+          <input name="application[lastName]" id="lastName" placeholder="Enter Last Name" type="text" class="form-control" required/>
           <div class="valid-feedback">Last Name looks good</div>
         </div>
         <div class="col">
           <label for="firstName" class="form-label">First Name</label>
-          <input name="listing[firstName]" placeholder="Enter First Name" type="text" class="form-control" required/>
+          <input name="application[firstName]" id="firstName" placeholder="Enter First Name" type="text" class="form-control" required/>
           <div class="valid-feedback">First Name looks good</div>
         </div>
         <div class="col">
           <label for="middleName" class="form-label">Middle Name</label>
-          <input name="listing[middleName]" placeholder="Enter Middle Name" type="text" class="form-control" required/>
+          <input name="application[middleName]" id="middleName" placeholder="Enter Middle Name" type="text" class="form-control" required/>
           <div class="valid-feedback">Middle Name looks good</div>
         </div>
       </div>
 
+      <!-- Hidden input to hold the concatenated full name -->
+      <input type="hidden" name="application[fullName]" id="fullName"/>
+
       <div class="mb-3 row">
         <div class="col">
-          <label for="RollNO." class="form-label">Roll / Enrollment No.</label>
-          <input name="listing[RollNO.]" placeholder="Enter Roll / Enroll NO." type="number" class="form-control" max="2" min="4" required/>
-          <div class="valid-feedback">roll no. is OK</div>
+          <label for="RollNO" class="form-label">Roll / Enrollment No.</label>
+          <input name="application[RollNO]" placeholder="Enter Roll / Enroll NO." type="number" class="form-control" max="100000" min="1" required/>
+          <div class="valid-feedback">Roll No. is OK</div>
         </div>
         <div class="col">
-          <label for="middleName" class="form-label">Branch Name</label>
-          <input name="listing[BranchName]" placeholder="Enter Branch Name" type="text" class="form-control" required/>
+          <label for="course" class="form-label">Branch Name</label>
+          <input name="application[course]" placeholder="Enter Branch Name" type="text" class="form-control" required/>
           <div class="valid-feedback">Branch is OK</div>
         </div>
       </div>
+
       <div class="mb-3">
-        <label for="Reason" class="form-label">Reason for Leaving</label>
-        <input name="listing[Reason]" placeholder="Give Appropriate Reason" type="text" class="form-control" min="20" max="50" required/>
+        <label for="reason" class="form-label">Reason for Leaving</label>
+        <input name="application[reason]" placeholder="Give Appropriate Reason" type="text" class="form-control" min="20" max="50" required/>
         <div class="invalid-feedback">Reason should be within 20 - 50 words</div>
       </div>
 
       <div class="mb-3"> 
         <label for="description" class="form-label">Description</label> 
-        <textarea name="listing[description]" class="form-control" placeholder="Reason for Leaving" required style="height: 125px;"></textarea>
-        <div class="invalid-feedback">Reason for Leaving</div>
+        <textarea name="application[description]" class="form-control" placeholder="Reason for Leaving" required style="height: 125px;"></textarea>
+        <div class="invalid-feedback">Description required</div>
       </div>
       <br>
       <button class="btn btn-dark add-btn">Apply</button>
@@ -52,3 +56,18 @@
     </form>
   </div>
 </div>
+
+<script>
+  document.getElementById('clcForm').addEventListener('submit', function(event) {
+    // Concatenate Last Name, First Name, and Middle Name
+    const lastName = document.getElementById('lastName').value;
+    const firstName = document.getElementById('firstName').value;
+    const middleName = document.getElementById('middleName').value;
+
+    // Full name in the format: Last Name First Name Middle Name
+    const fullName = `${lastName} ${firstName} ${middleName}`;
+
+    // Set the hidden input value to the concatenated full name
+    document.getElementById('fullName').value = fullName;
+  });
+</script>

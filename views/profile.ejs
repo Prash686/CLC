@@ -1,0 +1,217 @@
+<% layout('/layouts/boilerplate') -%>
+<style>
+    section {
+        font-family: 'Roboto', sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .profile-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        width: 80%;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    .profile-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 20px;
+        border: 4px solid #ff6f61;
+    }
+
+    h1 {
+        margin: 10px 0;
+        font-size: 26px;
+        color: #333;
+    }
+
+    .details {
+        text-align: left;
+        margin: 20px 0;
+        padding: 0 10px;
+    }
+
+    .details p {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #555;
+    }
+
+    input, textarea {
+        width: calc(100% - 20px);
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        display: none; /* Hidden by default */
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background-color: #ff6f61;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #e65c4d;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 500px) {
+        .profile-container {
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        .details p {
+            font-size: 14px;
+        }
+    }
+</style>
+
+<section style="height: 100%;">
+    <div class="profile-container">
+        <img id="profilePic" src="student.png" alt="Profile Picture" class="profile-image">
+        <h1 id="username"><%= user.college %></h1>
+        <div class="details">
+            <div class="mb-3">
+                <label for="studentName" class="form-label">Student Name:</label>
+                <span id="studentName"><%= user.name %></span>
+                <input type="text" id="studentNameInput" placeholder="Edit Student Name">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <span id="email"><%= user.email %></span>
+                <input type="text" id="emailInput" placeholder="Edit Email">
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone No:</label>
+                <span id="phone"><%= user.phone || 'N/A' %></span>
+                <input type="text" id="phoneInput" placeholder="Edit Phone No">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <span id="address"><%= user.address || 'N/A' %></span>
+                <input type="text" id="addressInput" placeholder="Edit Address">
+            </div>
+            <div class="mb-3">
+                <label for="state" class="form-label">State:</label>
+                <span id="state"><%= user.state || 'N/A' %></span>
+                <input type="text" id="stateInput" placeholder="Edit State">
+            </div>
+            <div class="mb-3">
+                <label for="course" class="form-label">Course:</label>
+                <span id="course"><%= user.course || 'N/A' %></span>
+                <input type="text" id="courseInput" placeholder="Edit Course">
+            </div>
+            <div class="mb-3">
+                <label for="graduationYear" class="form-label">Graduation Year:</label>
+                <span id="graduationYear"><%= user.graduationYear || 'N/A' %></span>
+                <input type="text" id="graduationYearInput" placeholder="Edit Graduation Year">
+            </div>
+            <div class="mb-3">
+                <label for="rollNumber" class="form-label">Institute Number:</label>
+                <span id="rollNumber"><%= user.rollNumber || 'N/A' %></span>
+                <input type="text" id="rollNumberInput" placeholder="Edit Institute Number">
+            </div>
+        </div>
+        <button id="editButton" onclick="toggleEdit()">Edit Profile</button>
+        <button id="doneButton" onclick="saveProfile()" style="display: none;">Done</button>
+    </div>
+
+    <script>
+        let isEditing = false;
+
+        function toggleEdit() {
+            const inputs = document.querySelectorAll('.details input');
+            const spans = document.querySelectorAll('.details span');
+
+            if (!isEditing) {
+                inputs.forEach(input => {
+                    input.style.display = "inline-block";
+                    input.value = input.previousElementSibling.innerText.trim();
+                });
+                spans.forEach(span => {
+                    span.style.display = "none";
+                });
+                document.getElementById("editButton").style.display = "none";
+                document.getElementById("doneButton").style.display = "inline";
+                isEditing = true;
+            } else {
+                inputs.forEach(input => {
+                    input.style.display = "none";
+                });
+                spans.forEach(span => {
+                    span.style.display = "inline";
+                });
+                document.getElementById("editButton").style.display = "inline";
+                document.getElementById("doneButton").style.display = "none";
+                isEditing = false;
+            }
+        }
+
+        function saveProfile() {
+            const inputs = document.querySelectorAll('.details input');
+            const spans = document.querySelectorAll('.details span');
+
+            let isValid = true;
+
+            inputs.forEach((input, index) => {
+                if (input.value.trim() === '') {
+                    isValid = false;
+                } else {
+                    spans[index].innerText = input.value;
+                }
+                input.style.display = "none";
+            });
+
+            if (isValid) {
+                spans.forEach(span => {
+                    span.style.display = "inline";
+                });
+                document.getElementById("editButton").style.display = "inline";
+                document.getElementById("doneButton").style.display = "none";
+                isEditing = false;
+
+                // Here you could make an AJAX call to save the updated data in the backend
+            } else {
+                alert("Please fill in all fields!");
+                inputs.forEach(input => {
+                    input.style.display = "inline-block";
+                });
+                spans.forEach(span => {
+                    span.style.display = "none";
+                });
+            }
+        }
+    </script>
+</section>

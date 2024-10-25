@@ -1,0 +1,156 @@
+<% layout('/layouts/boilerplate') -%>
+<style>
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+    
+    h1 {
+        font-weight: bold;
+        color: #3c2559; /* Primary theme color */
+    }
+    
+    .card {
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+    }
+    
+    .card-title {
+        color: #3c2559;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    
+    .card-body p {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    hr {
+        border: 1px solid #3c2559;
+    }
+    
+    .badge {
+        padding: 5px 10px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .btn-success, .btn-danger {
+        padding: 10px 20px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .btn-success:hover {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    .btn-secondary {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #3c2559;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #4a2e6b;
+    }
+    
+    .btn-link {
+        font-size: 16px;
+        color: #3c2559;
+    }
+    
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+    
+    .actions {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .actions form {
+        margin-right: 10px;
+    }
+    
+</style>
+<div class="container mt-5 mb-5">
+    <h1 class="text-center mb-4">Application Details</h1>
+    
+    <!-- Student Info -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title">Student Information</h4>
+            <hr>
+            <p><strong>Name:</strong> <%= application.studentId.username %></p>
+            <p><strong>Email:</strong> <%= application.studentId.email %></p>
+            <p><strong>College:</strong> <%= application.studentId.college %></p>
+        </div>
+    </div>
+
+    <!-- Application Info -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title">Application Information</h4>
+            <hr>
+            <p><strong>Course:</strong> <%= application.course %></p>
+            <p><strong>Reason for Leaving:</strong> <%= application.reason %></p>
+            <p><strong>Status:</strong> 
+                <span class="badge <%= application.status === 'Approved' ? 'bg-success' : (application.status === 'Rejected' ? 'bg-danger' : 'bg-warning') %>">
+                    <%= application.status %>
+                </span>
+            </p>
+            <p><strong>Date Applied:</strong> <%= application.dateApplied.toDateString() %></p>
+        </div>
+    </div>
+
+    <!-- Remarks and Uploaded Documents -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title">Additional Information</h4>
+            <hr>
+            <% if (application.remarks) { %>
+                <p><strong>Admin Remarks:</strong> <%= application.remarks %></p>
+            <% } else { %>
+                <p><strong>Admin Remarks:</strong> No remarks yet.</p>
+            <% } %>
+
+            <% if (application.documentUploaded) { %>
+                <p><strong>Uploaded Document:</strong> <a href="<%= application.documentUploaded %>" class="btn btn-link">Download</a></p>
+            <% } else { %>
+                <p><strong>Uploaded Document:</strong> No document uploaded.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Actions for Admin (Approve/Reject) -->
+    <% if (application.status === 'Pending') { %>
+        <div class="actions text-center">
+            <form action="/application/<%= application._id %>/approve" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-success me-2">Approve</button>
+            </form>
+            <form action="/application/<%= application._id %>/reject" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Reject</button>
+            </form>
+        </div>
+    <% } else { %>
+        <p class="text-center"><strong>Application Reviewed on:</strong> <%= application.dateReviewed ? application.dateReviewed.toDateString() : 'N/A' %></p>
+    <% } %>
+
+    <!-- Back to Dashboard Button -->
+    <div class="text-center mt-4">
+        <a href="/admin/home/#view-applications" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>

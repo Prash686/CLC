@@ -22,8 +22,8 @@ module.exports.saveRedirectUrl = (req, res, next) => {
 // Middleware to check if a user is an admin
 module.exports.isAdmin = (req, res, next) => {
     if (res.locals.currUser.role !== 'admin') {
-        req.flash("error", "You do not have permission to perform this action");
-        return res.redirect("/clc/applications"); // Redirect to a relevant page
+        req.flash("error", "Please login as admin");
+        return res.redirect("/login"); // Redirect to a relevant page
     }
     next();
 };

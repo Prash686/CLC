@@ -9,12 +9,37 @@ const userSchema = new Schema({
     },
     college: {
         type: String,
+
         required: true // Name of the college
     },
     email: {
         type: String,
         required: true,
         unique: true // Ensure email is unique
+    },
+    phone: {
+        type: String,
+        required: false // Optional phone number
+    },
+    address: {
+        type: String,
+        required: false // Optional address
+    },
+    state: {
+        type: String,
+        required: false // Optional state
+    },
+    course: {
+        type: String,
+        required: false // Optional course
+    },
+    graduationYear: {
+        type: String,
+        required: false // Optional graduation year
+    },
+    rollNumber: {
+        type: String,
+        required: false // Optional institute number
     },
     role: { 
         type: String, 
@@ -31,4 +56,4 @@ const userSchema = new Schema({
 // Apply the passportLocalMongoose plugin to the userSchema for authentication
 userSchema.plugin(passportLocalMongoose);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

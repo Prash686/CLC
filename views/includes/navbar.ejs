@@ -66,12 +66,12 @@
       padding: 20px; /* Add padding for the offcanvas body */
   }
 </style>
-<body>
+
 
 <nav class="navbar navbar-expand-md border-bottom sticky-top">
 <div class="container-fluid">
     <a class="navbar-brand" href="/home">
-        <img src="logo.png" alt="Logo" class="logo"> Student Portal
+        <img src="/image/logo.png" alt="Logo" class="logo"> Student Portal
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
         <span class="navbar-toggler-icon"></span>
@@ -93,9 +93,15 @@
 </div>
 <div class="offcanvas-body">
     <div class="navbar-nav">
+        <a class="nav-link" href="/home"><i class="fa-solid fa-house"></i> Home</a>
         <a class="nav-link" href="/profile"><i class="fa-solid fa-user"></i> Profile</a>
-        <a class="nav-link" href="/apply-clc"><i class="fa-solid fa-file-upload"></i> Apply for CLC</a>
-        <a class="nav-link" href="/check-status"><i class="fa-solid fa-check-circle"></i> Check Application Status</a>
+
+        <% if (currUser && currUser.role === 'student') { %>
+            <a class="nav-link" href="/apply-clc"><i class="fa-solid fa-file-upload"></i> Apply for CLC</a>
+            <a class="nav-link" href="/check-status"><i class="fa-solid fa-check-circle"></i> Check Application Status</a>
+        <% } else if (currUser && currUser.role === 'admin') { %>
+            <a class="nav-link" href="/admin/home/#view-applications"><i class="fa-solid fa-eye"></i> View Applications</a>
+        <% } %>
     </div>
     <div class="navbar-nav">
         <% if (!currUser) { %>
@@ -120,3 +126,4 @@ document.getElementById('sidebarToggle').addEventListener('click', function () {
     sidebar.show();
 });
 </script>
+
